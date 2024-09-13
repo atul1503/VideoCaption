@@ -21,6 +21,6 @@ from videocaption.views import react_app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/',include(api.urls)),
+    path('api/',include('api.urls')),
     path('',react_app)
 ]

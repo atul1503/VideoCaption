@@ -14,7 +14,8 @@ class Subtitle(models.Model):
 
 
 
-    def get_total_seconds(self,time: str):
+    def get_total_seconds(time: str):
+        print(time)
         hrs,minutes,seconds=time.split(":")
         seconds=seconds.split(",")[0]
         hrs,minutes,seconds=int(hrs),int(minutes),int(seconds)
@@ -23,7 +24,7 @@ class Subtitle(models.Model):
 
 
 
-    def verify(self,data):
+    def verify(data):
         new_data={
             "name": data.get("name",""),
             "caption": data.get("caption",""),
@@ -42,7 +43,7 @@ class Subtitle(models.Model):
         if new_data["startSecond"]<0:
             raise ValidationError("start second should be there.")
         
-        new_data["startSecond"]=self.get_total_seconds(new_data["startSecond"])
+        
         
         exists=Subtitle.objects.filter(Q(name=new_data["name"]) & Q(Q(endSecond=new_data["endSecond"]) & Q(startSecond=new_data["startSecond"]))).exists()
         if exists:
