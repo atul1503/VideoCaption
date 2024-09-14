@@ -25,6 +25,8 @@ def extract_subs(filename,video_file_name):
         for instance in instances:
             try:
                 id,time_range,*text=instance.split("\n")
+                if type(text) == list:
+                    text="\n".join(text)
             except ValueError:
                 continue
             start_time,end_time=time_range.split(" --> ")
@@ -49,9 +51,9 @@ def setsubtitles(file_url):
         process=subprocess.Popen(command,stderr=open("erro.log","w"),stdout=subprocess.PIPE)
         while True:
             status=process.poll()
-            print("status is "+str(status))
+            print("Subtitle stream processing status : "+str(status))
             if status!=None:
-                print("process is over")
+                print("A substitle stream processing is over")
                 break
         if status!=0:
             break
@@ -74,5 +76,5 @@ def setsubtitles(file_url):
             obj.save()
 
         i=i+1
-    print("its done")
+    print("All subs processed.")
 
