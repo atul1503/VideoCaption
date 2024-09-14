@@ -38,7 +38,7 @@ def get_subtitle_languages(file_name):
 
 
 
-def extract_subs(filename,video_file_name):
+def extract_subs(filename,video_file_name,lang):
     with open(filename) as f:
         raw=f.read()
         map_list=[]
@@ -57,7 +57,8 @@ def extract_subs(filename,video_file_name):
                 "startTime": start_time_seconds,
                 "endTime": end_time_seconds,
                 "text": text,
-                "name": video_file_name
+                "name": video_file_name,
+                "language": lang
             }
             map_list.append(map)
     return map_list
@@ -68,7 +69,6 @@ def extract_subs(filename,video_file_name):
 def setsubtitles(file_url):
     
     languages=get_subtitle_languages(file_url)
-    print(languages)
     for index,lang in languages:
         command=["ffmpeg","-i",file_url,"-map","0:s:"+str(index),"file-"+str(lang)+".srt"]
         process=subprocess.Popen(command,stderr=open("erro.log","w"),stdout=subprocess.PIPE)
@@ -80,7 +80,7 @@ def setsubtitles(file_url):
                 break
         if status!=0:
             break
-        map_list=extract_subs("file-"+str(lang)+".srt",file_url+"_"+str(lang))
+        map_list=extract_subs("file-"+str(lang)+".srt",file_url,lang)
         os.remove("file-"+str(lang)+".srt")
         for map in map_list:
             name=file_url.split("/")[-1]+"-"+str(lang)
@@ -89,7 +89,8 @@ def setsubtitles(file_url):
                     "startSecond": map["startTime"],
                     "endSecond": map["endTime"],
                     "caption": map["text"],
-                    "name": map["name"]
+                    "name": map["name"],
+                    "language": map["language"]
                 })
             except ValidationError:
                 print("Data not valid")

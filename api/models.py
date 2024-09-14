@@ -11,6 +11,7 @@ class Subtitle(models.Model):
     endSecond=models.FloatField()
     name=models.CharField(max_length=1000)
     caption=models.TextField(max_length=1000)
+    language=models.TextField(max_length=50)
 
 
     def get_total_seconds(time: str):
@@ -29,6 +30,7 @@ class Subtitle(models.Model):
             "caption": data.get("caption",""),
             "endSecond": data.get("endSecond",-1),
             "startSecond": data.get("startSecond",-1),
+            "language": data.get("language","")
         }
 
 
@@ -41,10 +43,12 @@ class Subtitle(models.Model):
             raise ValidationError("end Second should be there.")
         if new_data["startSecond"]<0:
             raise ValidationError("start second should be there.")
+        if new_data["language"]=="":
+            raise ValidationError("language must be there")
         
         
         
-        exists=Subtitle.objects.filter(Q(name=new_data["name"]) & Q(Q(endSecond=new_data["endSecond"]) & Q(startSecond=new_data["startSecond"]))).exists()
+        exists=Subtitle.objects.filter(Q(name=new_data["name"]) & Q(Q(endSecond=new_data["endSecond"]) & Q(startSecond=new_data["startSecond"]) & Q(language=new_data["language"]) )).exists()
         if exists:
             raise ValidationError("object already exists")
         
