@@ -4,6 +4,7 @@ from celery import shared_task
 from api.models import Subtitle
 from django.core.exceptions import ValidationError
 import os
+import json
 
 @shared_task
 def hello_task():
@@ -16,6 +17,26 @@ def get_seconds(time: str):
     hrs,minutes,seconds=int(hrs),int(minutes),int(seconds)
     total=(hrs*60*60)+(minutes*60)+(seconds)
     return total
+
+
+def get_subtitle_languages(file_name):
+    command=['ffprobe', '-v', 'quiet', '-print_format', 'json' ,'-show_format', '-show_streams', file_name]
+    process=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    while True:
+        status=process.poll()
+        if status!=None:
+            break
+    output,err=process.communicate()
+    data=json.loads(output)
+    langs=[]
+    index=0
+    for stream in data["streams"]:
+        if stream["codec_type"]=="subtitle":
+            langs.append([index,stream["tags"].get("language","UnknownLanguage")])
+            index+=1
+    return langs
+
+
 
 def extract_subs(filename,video_file_name):
     with open(filename) as f:
@@ -45,9 +66,11 @@ def extract_subs(filename,video_file_name):
 
 @shared_task
 def setsubtitles(file_url):
-    i=0
-    while True: 
-        command=["ffmpeg","-i",file_url,"-map","0:s:"+str(i),"file-"+str(i)+".srt"]
+    
+    languages=get_subtitle_languages(file_url)
+    print(languages)
+    for index,lang in languages:
+        command=["ffmpeg","-i",file_url,"-map","0:s:"+str(index),"file-"+str(lang)+".srt"]
         process=subprocess.Popen(command,stderr=open("erro.log","w"),stdout=subprocess.PIPE)
         while True:
             status=process.poll()
@@ -57,10 +80,10 @@ def setsubtitles(file_url):
                 break
         if status!=0:
             break
-        map_list=extract_subs("file-"+str(i)+".srt",file_url+str(i))
-        os.remove("file-"+str(i)+".srt")
+        map_list=extract_subs("file-"+str(lang)+".srt",file_url+"_"+str(lang))
+        os.remove("file-"+str(lang)+".srt")
         for map in map_list:
-            name=file_url.split("/")[-1]+"-"+str(i)
+            name=file_url.split("/")[-1]+"-"+str(lang)
             try:
                 verified_data=Subtitle.verify(data={
                     "startSecond": map["startTime"],
@@ -70,11 +93,9 @@ def setsubtitles(file_url):
                 })
             except ValidationError:
                 print("Data not valid")
-                return 
+                continue
 
             obj=Subtitle(**verified_data)
             obj.save()
-
-        i=i+1
     print("All subs processed.")
 
