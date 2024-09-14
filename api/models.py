@@ -13,6 +13,18 @@ class Subtitle(models.Model):
     caption=models.TextField(max_length=1000)
 
 
+    def serialize(self):
+        # converts object to dictionary for sending as request.
+
+        return {
+            "name": self.name,
+            "startSecond" : self.startSecond,
+            "endSecond": self.endSecond,
+            "caption": self.caption
+        }
+
+
+
 
     def get_total_seconds(time: str):
         print(time)
