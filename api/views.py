@@ -30,7 +30,7 @@ def poll_status(request: HttpRequest):
         "status" : AsyncResult(id).status
         })
 
-
+@csrf_exempt
 def get_file_by_name(request: HttpRequest):
     name=request.GET.get("name","")
     return FileResponse(open(os.path.join(settings.MEDIA_ROOT,name),"rb"))
