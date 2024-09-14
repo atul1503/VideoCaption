@@ -36,6 +36,13 @@ def get_file_by_name(request: HttpRequest):
     return FileResponse(open(os.path.join(settings.MEDIA_ROOT,name),"rb"))
     
 
+def get_languages(request: HttpRequest):
+    qs=Subtitle.objects.filter(name=request.GET["video_name"]).distinct("language")
+    return JsonResponse({
+        "subtitles": list(qs.values())
+    })
+
+
 @csrf_exempt
 def upload_and_process(request):
     file=request.FILES['file']
