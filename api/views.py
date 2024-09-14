@@ -37,12 +37,19 @@ def get_file_by_name(request: HttpRequest):
 @csrf_exempt
 def upload_and_process(request):
     file=request.FILES['file']
+
+    if os.path.exists(os.path.join(settings.MEDIA_ROOT,file.name)):
+        return JsonResponse({
+            "task_id": "", 
+            "message": "File already exists"
+        },status=201)
+
     file_name=default_storage.save(file.name,ContentFile(file.read()))
-    file_url=os.path.join(settings.MEDIA_URL,file_name)[1:]
+    file_url=os.path.join(settings.MEDIA_ROOT,file_name)
     task_id=setsubtitles.delay(file_url)
     return JsonResponse({
         "task_id": task_id.id
-    })
+    },status=200)
     
     
 
