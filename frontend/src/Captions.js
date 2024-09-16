@@ -66,6 +66,13 @@ export default function Captions(){
             } >
                 {caption}
             </div>
+            <br/>
+            <div style={{
+                fontWeight: 2000
+            }
+            } >
+                {caption}
+            </div>
             {languages!=[]?
             <select ref={languageref}>
                 {languages.map((item,idx)=>{

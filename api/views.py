@@ -76,7 +76,7 @@ def upload_and_process(request):
 
     if os.path.exists(os.path.join(settings.MEDIA_ROOT,file.name)):
         return JsonResponse({
-            "task_id": "", 
+            "task_id": 0, 
             "message": "File already exists"
         },status=201)
 

@@ -4,7 +4,7 @@ const initState={
     timestamp: 0,
     startTime: 0,
     video_src: "",
-    video_full_name: "/Users/attripathi/Projects/VideoCaption/media/test1.webm"
+    video_full_name: "/Users/attripathi/Projects/VideoCaption/media/test2.mkv.webm"
 }
 
 
