@@ -59,8 +59,8 @@ export default function Captions(){
             <div style={{
                 position: "absolute",
                 left: '35%',
-                bottom: '20%',
-                color: 'white',
+                bottom: '31%',
+                color: 'black',
                 fontWeight: 1200
             }
             } >
@@ -77,9 +77,13 @@ export default function Captions(){
             } >
                 {caption}
             </div>
-            </center>
+            
+            <br/>
+            <br/>
+            <br/>
+            
             {languages!=[]?
-            <select ref={languageref}>
+            <label>Subtitle Language: <select ref={languageref}>
                 {languages.map((item,idx)=>{
                     if(idx===0){
                         return (
@@ -91,7 +95,11 @@ export default function Captions(){
                     )
                 })} 
             </select>
+            </label>
 :null}
+
+<br/>
+<br/>
 
                 {languages.length!==0?
                 <div>
@@ -120,6 +128,8 @@ export default function Captions(){
                    }}> Search </button>
                 </div>
                 :null}
+
+            </center>
 
         </div>
     )
