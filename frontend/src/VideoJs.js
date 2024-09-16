@@ -62,6 +62,7 @@ export default function VideoJS(props){
         player.dispose();
         playerRef.current = null;
       }
+      localStorage.removeItem('startTime');
     };
   }, [playerRef]);
 
