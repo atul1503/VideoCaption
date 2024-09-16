@@ -34,6 +34,7 @@ export default function Operations(){
             <VideoJS
             options={{
                 controls: true,
+                fill: true,
                 sources:[{
                     src: video_src,
                     type: "video/"+video_name.split("/").pop().split(".").pop()

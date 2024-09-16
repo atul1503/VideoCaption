@@ -59,7 +59,7 @@ export default function Captions(){
             <div style={{
                 position: "absolute",
                 left: '35%',
-                bottom: '12%',
+                bottom: '20%',
                 color: 'white',
                 fontWeight: 1200
             }
@@ -67,12 +67,17 @@ export default function Captions(){
                 {caption}
             </div>
             <br/>
-            <div style={{
-                fontWeight: 2000
+            Captions for better readability: 
+            <br/>
+
+            <center><div style={{
+                fontWeight: 2000,
+                fontStyle: 'italic'
             }
             } >
                 {caption}
             </div>
+            </center>
             {languages!=[]?
             <select ref={languageref}>
                 {languages.map((item,idx)=>{
