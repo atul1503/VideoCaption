@@ -4,6 +4,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import os
 from django.http import JsonResponse
+from django.db.models import Q
 from django.conf import settings
 from api.models import Subtitle
 from videocaption.tasks import setsubtitles
@@ -24,6 +25,28 @@ def search_sub(request: HttpRequest):
         "subtitle": list(obj.values())
     })
 
+def get_current_subtitle(request):
+    time=abs(int(float(request.GET.get("time",0))))
+    video_name=request.GET.get("video_name",0)
+    language=request.GET.get("language","")
+    video_path=os.path.join(settings.MEDIA_ROOT,video_name)
+    obj=Subtitle.objects.filter(
+        Q(name=video_path) 
+        &
+        Q(language=language)
+        &
+        Q( 
+            Q(startSecond__lt=time) | Q(startSecond=time)
+         )
+         &
+        Q(
+            Q(endSecond__gt=time) | Q(endSecond=time)
+        )
+        )
+    return JsonResponse({
+        "subtitle": list(obj.values())
+    })
+
 def poll_status(request: HttpRequest):
     id=request.GET.get("id","")
     return JsonResponse({
@@ -33,9 +56,13 @@ def poll_status(request: HttpRequest):
 @csrf_exempt
 def get_file_by_name(request: HttpRequest):
     name=request.GET.get("name","")
-    return FileResponse(open(os.path.join(settings.MEDIA_ROOT,name),"rb"))
-    
+    response=FileResponse(open(os.path.join(settings.MEDIA_ROOT,name),"rb"),content_type='application/octet-stream')
+    response['Content-Disposition'] = f'attachment; filename="{name}"'
+    response['Content-Length'] = os.path.getsize(os.path.join(settings.MEDIA_ROOT,name))
+    return response
 
+    
+@csrf_exempt
 def get_languages(request: HttpRequest):
     qs=Subtitle.objects.filter(name=request.GET["video_name"]).distinct("language")
     return JsonResponse({
