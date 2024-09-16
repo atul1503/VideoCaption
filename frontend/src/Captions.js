@@ -13,6 +13,7 @@ export default function Captions(){
     const [endTime,setEndTime]=useState(-1);
 
 
+
     useEffect(()=>{
         fetch("http://127.0.0.1:8000/api/get_lang/?video_name="+video_full_name)
         .then((response)=>{
@@ -52,7 +53,13 @@ export default function Captions(){
 
     return (
         <div>
-            <div>
+            <div style={{
+                position: "absolute",
+                left: '35%',
+                bottom: '10%',
+                color: 'white'
+            }
+            } >
                 {caption}
             </div>
             {languages!=[]?

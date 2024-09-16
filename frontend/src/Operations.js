@@ -27,7 +27,9 @@ export default function Operations(){
 
 
     return (
-        <div>
+        <div style={{
+            position: "relative",
+        }}>
             {video_src!=""?
             <VideoJS
             options={{
@@ -37,7 +39,11 @@ export default function Operations(){
                     type: "video/"+video_name.split("/").pop().split(".").pop()
                 }]
             }}
-            />:null}
+            style={
+                {
+                    position: "absolute"
+                }
+            } />:null}
            <Captions/>
         </div>
     )

@@ -27,6 +27,7 @@ export default function VideoJS(props){
             payload: player.currentTime()
           })
         })
+
       });
 
     // You could update an existing player in the `else` block here
@@ -52,8 +53,11 @@ export default function VideoJS(props){
   }, [playerRef]);
 
   return (
-    <div data-vjs-player>
-      <div ref={videoRef} />
+    <div data-vjs-player style={{ display: 'flex', justifyContent: 'center' }}
+    >
+      <div ref={videoRef}  style={{
+        width: '50%',
+      }} />
     </div>
   );
 }
