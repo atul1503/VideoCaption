@@ -87,5 +87,10 @@ def upload_and_process(request):
         "task_id": task_id.id
     },status=200)
     
+def get_all_files(request):
+    query_set=Subtitle.objects.order_by('name').distinct('name')
+    return JsonResponse({
+       "subtitles":list(query_set.values())
+    })
     
 

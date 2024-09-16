@@ -40,6 +40,12 @@ const reducer=(state=initState,action)=>{
                 ...state,
                 video_src: action.payload
             }
+
+        case "set video name": 
+            return {
+                ...state,
+                video_full_name: action.payload
+            }
         default:
             return state
     }

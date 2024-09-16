@@ -60,7 +60,7 @@ export default function Captions(){
                 position: "absolute",
                 left: '35%',
                 bottom: '31%',
-                color: 'black',
+                color: 'white',
                 fontWeight: 1200
             }
             } >

@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import upload_and_process,search_sub,get_file_by_name,poll_status,get_languages,get_current_subtitle
+from .views import upload_and_process,search_sub,get_file_by_name,poll_status,get_languages,get_current_subtitle,get_all_files
 
 urlpatterns = [
     path("upload_and_process/",upload_and_process),
@@ -7,5 +7,6 @@ urlpatterns = [
     path("get_file_by_name/",get_file_by_name),
     path("poll_status/",poll_status),
     path("get_lang/",get_languages),
-    path("get_current_subtitle/",get_current_subtitle)
+    path("get_current_subtitle/",get_current_subtitle),
+    path("get_all_files/",get_all_files)
 ]
