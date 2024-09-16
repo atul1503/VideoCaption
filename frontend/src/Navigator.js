@@ -7,8 +7,14 @@ export default function Navigator(){
     const dispatch=useDispatch();
 
     return(
-        <div>
-            <div onClick={()=>{
+        <div style={{
+            display : 'flex',
+            //justifyContent: "space-between"
+        }}>
+            <div style={{
+                marginRight: '300px',
+                marginLeft: '100px'
+            }} onClick={()=>{
 
                 dispatch({
                     type: "set app context",
@@ -16,7 +22,9 @@ export default function Navigator(){
                 })
 
             }}>History</div>
-            <div onClick={()=>{
+            <div style={{
+                marginRight: '300px'
+            }} onClick={()=>{
                 
                 dispatch({
                     type: "set app context",
@@ -24,7 +32,9 @@ export default function Navigator(){
                 })
 
             }}>Upload</div>
-            <div onClick={()=>{
+            <div style={{
+                marginRight: '300px'
+            }} onClick={()=>{
                 
                 dispatch({
                     type: "set app context",
