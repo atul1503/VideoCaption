@@ -1,5 +1,6 @@
+
 import { useState,useRef,useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Captions(){
 
@@ -11,6 +12,8 @@ export default function Captions(){
     const languageref=useRef(null);
     const [startTime,setstartTime]=useState(-1);
     const [endTime,setEndTime]=useState(-1);
+    const searchRef=useRef(null);
+    const dispatch=useDispatch();
 
 
 
@@ -34,7 +37,7 @@ export default function Captions(){
         if(languageref.current.value==""){
             return 
         }
-        if(time<endTime && time>startTime){
+        if(time<endTime && time>=startTime){
             return
         }
         fetch("http://127.0.0.1:8000/api/get_current_subtitle/?video_name="+short_name+"&time="+time+"&language="+languageref.current.value)
@@ -56,8 +59,9 @@ export default function Captions(){
             <div style={{
                 position: "absolute",
                 left: '35%',
-                bottom: '10%',
-                color: 'white'
+                bottom: '12%',
+                color: 'white',
+                fontWeight: 1200
             }
             } >
                 {caption}
@@ -77,6 +81,33 @@ export default function Captions(){
             </select>
 :null}
 
+                {languages.length!==0?
+                <div>
+                   <label> Search text: <input type="text" ref={searchRef}/> </label>
+                   <button onClick={()=>{
+                    fetch("http://127.0.0.1:8000/api/search_sub_time/",{
+                        method: 'POST',
+                        headers: {},
+                        body: JSON.stringify({
+                                text: searchRef.current.value
+                        })
+                    })
+                    .then((response)=>{
+                        return response.json()
+                    })
+                    .then((data)=>{
+                        var data=data.subtitle;
+                        //console.log(data);
+                        if(data.length<1){
+                            return;
+                        }
+                        var startTime=Math.floor(parseFloat(data[0]["startSecond"]));
+                        localStorage.setItem("startTime", JSON.stringify(startTime));
+                        //dispatch({type: "update start time",payload: startTime})
+                    })
+                   }}> Search </button>
+                </div>
+                :null}
 
         </div>
     )

@@ -2,7 +2,7 @@
 const initState={
     appContext: "history",
     timestamp: 0,
-    playerRef: null,
+    startTime: 0,
     video_src: "",
     video_full_name: "/Users/attripathi/Projects/VideoCaption/media/test1.webm"
 }
@@ -10,6 +10,13 @@ const initState={
 
 const reducer=(state=initState,action)=>{
     switch(action.type){
+        case "update start time":
+            //console.log("got time "+action.payload)
+            return{
+                ...state,
+                startTime: action.payload
+            }
+
         case "update timestamp":
             return {
                 ...state,

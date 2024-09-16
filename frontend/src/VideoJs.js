@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function VideoJS(props){
   const videoRef = React.useRef(null);
   const playerRef = React.useRef(null);
   const {options} = props;
   const dispatch=useDispatch();
+  const startTime=useSelector(state=>state.startTime);
+
+  React.useEffect(()=>{
+    console.log("player updated");
+  })
+
 
   React.useEffect(() => {
 
@@ -21,6 +27,13 @@ export default function VideoJS(props){
 
       const player = playerRef.current = videojs(videoElement, options, () => {
         videojs.log('player is ready');
+
+        player.on('pause',()=>{
+          const storedValue = localStorage.getItem("startTime");
+          player.currentTime(storedValue);
+          //player.currentTime(startTime);
+        })
+
         player.on('timeupdate',()=>{
           dispatch({
             type: "update timestamp",
@@ -38,7 +51,7 @@ export default function VideoJS(props){
       player.autoplay(options.autoplay);
       player.src(options.sources);
     }
-  }, [options, videoRef]);
+  }, [options, videoRef,startTime]);
 
   // Dispose the Video.js player when the functional component unmounts
   React.useEffect(() => {
