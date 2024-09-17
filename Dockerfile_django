@@ -1,0 +1,13 @@
+FROM 3.9.20-bookworm
+
+RUN pip install poetry
+
+WORKDIR /app
+
+COPY pyproject.toml poetry.lock /app/
+
+RUN poetry install --no-dev
+
+COPY api videocaption build manage.py media /app/
+
+EXPOSE 8000

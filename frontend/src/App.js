@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 
 function App() {
 
+  console.log(process.env);
   const ctx=useSelector(state=>state.appContext);
 
   // history, upload, operations

@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  videocaption:
+    build:
+      context: .
+      dockerfile: Dockerfile_django 
+    env_file:
+      - videocaption.env
+    command: ["/bin/sh", "-c", "./entrypoint.sh"]
+    volumes:
+      - project_code:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile_celery_worker
+    env_file:
+      - videocaption.env
+    command: ["poetry","run","celery","-A","videocaption","worker","--loglevel=info"]
+    volumes:
+      - project_code:/app
+    depends_on:
+      - videocaption
+
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - videocaption.env
+  
+  redis:
+    image: "redis:latest"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  project_code:
+  redis_data:
+  postgres_data:
+    
+
