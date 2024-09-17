@@ -11,6 +11,7 @@ from videocaption.tasks import setsubtitles
 import videocaption.settings
 from django.views.decorators.csrf import csrf_exempt
 from celery.result import AsyncResult
+import shutil
 import json
 
 
@@ -70,19 +71,34 @@ def get_languages(request: HttpRequest):
     })
 
 
+def get_file_object(file):
+    *firstnames,extension=file.name.split(".")
+    if type(firstnames)==list:
+        firstnames=".".join(firstnames)
+    if extension=="mkv":
+        extension="mp4"
+    file.name=firstnames+"."+extension
+    return file
+
 @csrf_exempt
 def upload_and_process(request):
     file=request.FILES['file']
-
+    file=get_file_object(file)
     if os.path.exists(os.path.join(settings.MEDIA_ROOT,file.name)):
         return JsonResponse({
             "task_id": 0, 
             "message": "File already exists"
         },status=201)
-
+    
+    
     file_name=default_storage.save(file.name,ContentFile(file.read()))
-    file_url=os.path.join(settings.MEDIA_ROOT,file_name)
-    task_id=setsubtitles.delay(file_url)
+    file_url=os.path.join(os.path.join(os.environ.get("WORKER_VOLUME_MOUNT"),"media"),file_name)
+
+    server_file_location=os.path.join(os.getcwd(),os.path.join("media",file_name))
+    worker_file_location=os.path.join(os.path.join(os.environ.get("WORKER_VOLUME_MOUNT"),"media"),file_name)
+
+    shutil.copy(server_file_location,os.path.join(os.environ.get("WORKER_VOLUME_MOUNT"),"media"))
+    task_id=setsubtitles.delay(worker_file_location,server_file_location)
     return JsonResponse({
         "task_id": task_id.id
     },status=200)
