@@ -1,13 +1,18 @@
-FROM 3.9.20-bookworm
+FROM python:3.12.6-bullseye
 
 RUN pip install poetry
 
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock /app/
+COPY pyproject.toml /app/
 
-RUN poetry install --no-dev
+RUN poetry install
 
-COPY api videocaption build manage.py media /app/
+COPY entrypoint.sh /app
+COPY api /app/api
+COPY videocaption /app/videocaption
+COPY build /app/build 
+COPY manage.py /app 
+COPY media /app/media
 
 EXPOSE 8000

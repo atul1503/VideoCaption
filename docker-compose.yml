@@ -9,11 +9,11 @@ services:
       - videocaption.env
     command: ["/bin/sh", "-c", "./entrypoint.sh"]
     volumes:
-      - project_code:/app
+      - project_code:/volume
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - postgres
 
   celery_worker:
     build:
@@ -23,11 +23,11 @@ services:
       - videocaption.env
     command: ["poetry","run","celery","-A","videocaption","worker","--loglevel=info"]
     volumes:
-      - project_code:/app
+      - project_code:/volume
     depends_on:
       - videocaption
 
-  db:
+  postgres:
     image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
