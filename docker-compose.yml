@@ -26,6 +26,7 @@ services:
       - project_code:/volume
     depends_on:
       - videocaption
+      - redis
 
   postgres:
     image: postgres:15-alpine

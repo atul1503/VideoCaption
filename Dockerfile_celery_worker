@@ -3,11 +3,12 @@ FROM python:3.12.6-bullseye
 
 RUN pip install poetry
 
-WORKDIR /app
+WORKDIR /volume
 
-COPY pyproject.toml /app/
+COPY pyproject.toml /volume
 
 RUN poetry install
+
 
 
 
