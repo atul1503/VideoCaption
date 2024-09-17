@@ -20,7 +20,14 @@ def get_seconds(time: str):
 
 
 def get_subtitle_languages(file_name):
-    command=['ffprobe', '-v', 'quiet', '-print_format', 'json' ,'-show_format', '-show_streams', file_name]
+
+    command=['ffprobe', '-print_format', 'json' ,'-show_format', '-show_streams', file_name]
+    
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    print("output is this"+result.stdout)
+    print("error is this"+result.stderr)
+
     process=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     while True:
         status=process.poll()
@@ -38,7 +45,7 @@ def get_subtitle_languages(file_name):
 
 
 
-def extract_subs(filename,video_file_name,lang):
+def extract_subs(filename,video_file_name,lang,server_file_location):
     with open(filename) as f:
         raw=f.read()
         map_list=[]
@@ -57,7 +64,7 @@ def extract_subs(filename,video_file_name,lang):
                 "startTime": start_time_seconds,
                 "endTime": end_time_seconds,
                 "text": text,
-                "name": video_file_name,
+                "name": server_file_location,
                 "language": lang
             }
             map_list.append(map)
@@ -66,7 +73,7 @@ def extract_subs(filename,video_file_name,lang):
 
 
 @shared_task
-def setsubtitles(file_url):
+def setsubtitles(file_url,server_file_location):
     
     languages=get_subtitle_languages(file_url)
     for index,lang in languages:
@@ -80,7 +87,7 @@ def setsubtitles(file_url):
                 break
         if status!=0:
             break
-        map_list=extract_subs("file-"+str(lang)+".srt",file_url,lang)
+        map_list=extract_subs("file-"+str(lang)+".srt",file_url,lang,server_file_location)
         os.remove("file-"+str(lang)+".srt")
         for map in map_list:
             name=file_url.split("/")[-1]+"-"+str(lang)
