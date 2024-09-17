@@ -3,9 +3,11 @@ FROM python:3.12.6-bullseye
 
 RUN pip install poetry
 
+RUN apt-get -y update && apt-get install -y ffmpeg && apt-get clean
+
 WORKDIR /volume
 
-COPY pyproject.toml /volume
+COPY pyproject.toml media /volume/
 
 RUN poetry install
 
