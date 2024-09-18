@@ -32,7 +32,7 @@ export default function History(){
                         
                         style={{ 
                             cursor: 'pointer', 
-                            backgroundColor: item === selectedItem ? 'lightblue' : 'transparent',
+                            backgroundColor: 'lightblue',
                             padding: '10px',
                             border: '1px solid #ccc',
                             margin: '5px 0'

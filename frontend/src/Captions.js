@@ -59,7 +59,7 @@ export default function Captions(){
             <div style={{
                 position: "absolute",
                 left: '35%',
-                bottom: '31%',
+                bottom: '33%',
                 color: 'white',
                 fontWeight: 1200
             }
@@ -105,11 +105,18 @@ export default function Captions(){
                 <div>
                    <label> Search text: <input type="text" ref={searchRef}/> </label>
                    <button onClick={()=>{
+
+                    console.log({
+                        text: searchRef.current.value,
+                        video_name: video_full_name
+                })
+                
                     fetch("http://127.0.0.1:8000/api/search_sub_time/",{
                         method: 'POST',
                         headers: {},
                         body: JSON.stringify({
-                                text: searchRef.current.value
+                                text: searchRef.current.value,
+                                video_name: video_full_name
                         })
                     })
                     .then((response)=>{
@@ -118,9 +125,10 @@ export default function Captions(){
                     .then((data)=>{
                         var data=data.subtitle;
                         //console.log(data);
-                        if(data.length<1){
+                        if(data.length==0){
                             return;
                         }
+                        console.log(data[0]["startSecond"]+" is the startsecond.");
                         var startTime=Math.floor(parseFloat(data[0]["startSecond"]));
                         localStorage.setItem("startTime", JSON.stringify(startTime));
                         //dispatch({type: "update start time",payload: startTime})

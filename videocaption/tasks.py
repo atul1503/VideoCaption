@@ -45,7 +45,7 @@ def get_subtitle_languages(file_name):
 
 
 
-def extract_subs(filename,video_file_name,lang,server_file_location):
+def extract_subs(filename,video_file_name,lang):
     with open(filename) as f:
         raw=f.read()
         map_list=[]
@@ -64,7 +64,7 @@ def extract_subs(filename,video_file_name,lang,server_file_location):
                 "startTime": start_time_seconds,
                 "endTime": end_time_seconds,
                 "text": text,
-                "name": server_file_location,
+                "name": video_file_name,
                 "language": lang
             }
             map_list.append(map)
@@ -73,7 +73,7 @@ def extract_subs(filename,video_file_name,lang,server_file_location):
 
 
 @shared_task
-def setsubtitles(file_url,server_file_location):
+def setsubtitles(file_url):
     
     languages=get_subtitle_languages(file_url)
     for index,lang in languages:
@@ -87,7 +87,7 @@ def setsubtitles(file_url,server_file_location):
                 break
         if status!=0:
             break
-        map_list=extract_subs("file-"+str(lang)+".srt",file_url,lang,server_file_location)
+        map_list=extract_subs("file-"+str(lang)+".srt",file_url,lang)
         os.remove("file-"+str(lang)+".srt")
         for map in map_list:
             name=file_url.split("/")[-1]+"-"+str(lang)

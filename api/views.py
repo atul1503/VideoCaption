@@ -21,7 +21,8 @@ import json
 def search_sub(request: HttpRequest):
     body=json.loads(request.body)
     text: str=body.get("text",None)
-    obj=Subtitle.objects.filter(caption__icontains=text)
+    video_name: str=body.get("video_name","")
+    obj=Subtitle.objects.filter(caption__icontains=text,name=video_name)
     return JsonResponse({
         "subtitle": list(obj.values())
     })
@@ -92,13 +93,8 @@ def upload_and_process(request):
     
     
     file_name=default_storage.save(file.name,ContentFile(file.read()))
-    file_url=os.path.join(os.path.join(os.environ.get("WORKER_VOLUME_MOUNT"),"media"),file_name)
-
-    server_file_location=os.path.join(os.getcwd(),os.path.join("media",file_name))
-    worker_file_location=os.path.join(os.path.join(os.environ.get("WORKER_VOLUME_MOUNT"),"media"),file_name)
-
-    #shutil.copy(server_file_location,os.path.join(os.environ.get("WORKER_VOLUME_MOUNT"),"media"))
-    task_id=setsubtitles.delay(worker_file_location,server_file_location)
+    file_url=os.path.join(settings.MEDIA_ROOT,file_name)
+    task_id=setsubtitles.delay(file_url)
     return JsonResponse({
         "task_id": task_id.id
     },status=200)
