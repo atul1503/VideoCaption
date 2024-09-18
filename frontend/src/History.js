@@ -11,6 +11,9 @@ export default function History(){
         .then(response=>response.json())
         .then((data)=>{
             data=data.subtitles;
+            if(data.length<1){
+                return;
+            }
             //console.log(data);
             console.log(data[0]["name"]);
             setnames(data.map((item,idx)=>{
@@ -25,7 +28,17 @@ export default function History(){
              <ul>
                 {names.map((item,idx)=>{
                     return(
-                        <li onClick={()=>{
+                        <li 
+                        
+                        style={{ 
+                            cursor: 'pointer', 
+                            backgroundColor: item === selectedItem ? 'lightblue' : 'transparent',
+                            padding: '10px',
+                            border: '1px solid #ccc',
+                            margin: '5px 0'
+                        }}
+                        
+                        onClick={()=>{
                                 dispatch({
                                     type: "set video name",
                                     payload: item
