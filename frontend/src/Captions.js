@@ -1,6 +1,7 @@
 
 import { useState,useRef,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import videojs from "video.js";
 
 export default function Captions(){
 
@@ -128,14 +129,17 @@ export default function Captions(){
                         if(data.length==0){
                             return;
                         }
-                        console.log(data[0]["startSecond"]+" is the startsecond.");
-                        var startTime=Math.floor(parseFloat(data[0]["startSecond"]));
-                        localStorage.setItem("startTime", JSON.stringify(startTime));
+                        var player=videojs.getPlayer(document.getElementsByTagName("video-js")[0]);
+                        player.currentTime(parseInt(data[0]["startSecond"]));
+                        //var startTime=Math.floor(parseFloat(data[0]["startSecond"]));
+                        //localStorage.setItem("startTime", JSON.stringify(startTime));
                         //dispatch({type: "update start time",payload: startTime})
                     })
                    }}> Search </button>
                 </div>
                 :null}
+
+
 
             </center>
 

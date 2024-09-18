@@ -28,12 +28,6 @@ export default function VideoJS(props){
       const player = playerRef.current = videojs(videoElement, options, () => {
         videojs.log('player is ready');
 
-        player.on('pause',()=>{
-          const storedValue = localStorage.getItem("startTime");
-          player.currentTime(storedValue);
-          //player.currentTime(startTime);
-        })
-
         player.on('timeupdate',()=>{
           dispatch({
             type: "update timestamp",
