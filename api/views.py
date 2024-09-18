@@ -97,7 +97,7 @@ def upload_and_process(request):
     server_file_location=os.path.join(os.getcwd(),os.path.join("media",file_name))
     worker_file_location=os.path.join(os.path.join(os.environ.get("WORKER_VOLUME_MOUNT"),"media"),file_name)
 
-    shutil.copy(server_file_location,os.path.join(os.environ.get("WORKER_VOLUME_MOUNT"),"media"))
+    #shutil.copy(server_file_location,os.path.join(os.environ.get("WORKER_VOLUME_MOUNT"),"media"))
     task_id=setsubtitles.delay(worker_file_location,server_file_location)
     return JsonResponse({
         "task_id": task_id.id

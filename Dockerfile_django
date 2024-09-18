@@ -4,15 +4,15 @@ RUN pip install poetry
 
 WORKDIR /app
 
-COPY pyproject.toml /app/
+COPY requirements.txt /app/
 
-RUN poetry install
+RUN pip install -r requirements.txt
 
-COPY entrypoint.sh /app
+COPY server_init.sh /app
 COPY api /app/api
 COPY videocaption /app/videocaption
 COPY build /app/build 
-COPY manage.py /app 
+COPY manage.py /app
 COPY media /app/media
 
 EXPOSE 8000
