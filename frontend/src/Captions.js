@@ -14,6 +14,7 @@ export default function Captions(){
     const [startTime,setstartTime]=useState(-1);
     const [endTime,setEndTime]=useState(-1);
     const searchRef=useRef(null);
+    const [timestamp,settimestamp]=useState(-1);
     const dispatch=useDispatch();
 
 
@@ -102,6 +103,13 @@ export default function Captions(){
 <br/>
 <br/>
 
+
+                {timestamp>-1?<div style={{ color: 'blue' }} onClick={()=>{
+                    var player=videojs.getPlayer(document.getElementsByTagName("video-js")[0]);
+                    player.currentTime(timestamp);
+                }}>timestamp: {timestamp} </div>:null}
+
+
                 {languages.length!==0?
                 <div>
                    <label> Search text: <input type="text" ref={searchRef}/> </label>
@@ -129,8 +137,10 @@ export default function Captions(){
                         if(data.length==0){
                             return;
                         }
-                        var player=videojs.getPlayer(document.getElementsByTagName("video-js")[0]);
-                        player.currentTime(parseInt(data[0]["startSecond"]));
+                        //var player=videojs.getPlayer(document.getElementsByTagName("video-js")[0]);
+                        //player.currentTime(parseInt(data[0]["startSecond"]));
+                        settimestamp(parseInt(data[0]["startSecond"]))
+
                         //var startTime=Math.floor(parseFloat(data[0]["startSecond"]));
                         //localStorage.setItem("startTime", JSON.stringify(startTime));
                         //dispatch({type: "update start time",payload: startTime})
@@ -143,6 +153,11 @@ export default function Captions(){
 
             </center>
 
+
+<br/>
+<br/>
+<br/>
+<br/>
         </div>
     )
 }
