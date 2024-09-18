@@ -53,15 +53,21 @@ export default function Captions(){
             setstartTime(Math.floor(parseFloat(data.subtitle[0]['startSecond'])))
             setEndTime(Math.floor(parseFloat(data.subtitle[0]['endSecond'])))
             setcaption(data.subtitle[0]["caption"]);
+            //console.log(videodiv.getBoundingClientRect().top,videodiv.getBoundingClientRect().right);
+            const captiondiv=document.getElementById("captiondiv");
+            const videodiv=document.getElementsByTagName("video-js")[0].getBoundingClientRect();
+            var height=videodiv.top+videodiv.height*0.8;
+            var width=videodiv.left+videodiv.width*0.1;
+            captiondiv.style.top=height+'px';
+            captiondiv.style.left=width+'px';
+
         })
     },[video_full_name,time])
 
     return (
         <div>
-            <div style={{
+            <div id="captiondiv" style={{
                 position: "absolute",
-                left: '35%',
-                bottom: '33%',
                 color: 'white',
                 fontWeight: 1200
             }

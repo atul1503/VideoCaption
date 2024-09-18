@@ -63,10 +63,11 @@ export default function VideoJS(props){
   return (
     <div data-vjs-player style={{ display: 'flex', justifyContent: 'center' }}
     >
-      <div ref={videoRef}  style={{
+      <div id="videoid" ref={videoRef}  style={{
         width: '800px',
         height: '500px'
-      }} />
+      }}> 
+        </div>
     </div>
   );
 }
