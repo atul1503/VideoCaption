@@ -6,12 +6,13 @@ A web application that allows users to upload videos with subtitles and watch th
     2. Skip to your favourite part by searching for dialogues.
 
 ## Tech Stack used: 
-    django, postgres, redis, celery, react, docker
+    django, postgres, redis, celery, react, redux,  docker
 
 
 ## How to run:
+    0. Install docker and docker compose.
     1. Clone this repo in your linux local or macos local.
-    2. `cd Videocation`
+    2. `cd Videocaption`
     3. `./devstart`
     4. Wait for all containers to start.
     5. Go to browser and open `http://localhost:8000`
@@ -20,7 +21,7 @@ A web application that allows users to upload videos with subtitles and watch th
 
 ### Upload file
     1. To upload file, click on upload button.
-    2. Choose file from the give file input.
+    2. Choose file from the given file input.
     3. When it shows "success", then return to history page by clicking on the history button.
     4. You will see your file there.
 
