@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-!$&s5_vu=6o4+^wlpmr_sv5zwf)6ys24r1e!4#%^1pej4a0f4y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['videocaption','localhost','127.0.0.1']
 
 
 # Application definition
@@ -78,6 +78,8 @@ STATICFILES_DIRS=[
 ]
 
 WSGI_APPLICATION = 'videocaption.wsgi.application'
+
+
 
 
 # Database
