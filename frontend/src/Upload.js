@@ -2,19 +2,26 @@ import { useEffect, useState } from "react";
 
 export default function Upload() {
   const [id, setId] = useState(0);
-  const [success, setSuccess] = useState(false);
+  const [status, setStatus] = useState("not started");
 
   useEffect(() => {
-    if (id === 0 || success) return;
+    if (id === 0) return;
 
     const interval = setInterval(() => {
       fetch(`http://127.0.0.1:8000/api/poll_status/?id=${id}`)
         .then(response => response.json())
         .then(data => {
           console.log(data.status);
-          if (data.status === "SUCCESS" || data.status === "FAILURE" ) {
-            setSuccess(true);
+          if (data.status === "SUCCESS") {
+            setStatus("success");
             clearInterval(interval); // Stop further polling
+          }
+          else if(data.status === "FAILURE"){
+            setStatus("failed")
+            clearInterval(interval); // Stop further polling
+          }
+          else{
+            setStatus("pending")
           }
         });
 
@@ -22,10 +29,9 @@ export default function Upload() {
 
     // Cleanup on unmount or on id/success change
     return () => clearInterval(interval);
-  }, [id, success]);
+  }, [id]);
 
   const uploadFile = (event) => {
-    console.log("file upload started");
     const formData = new FormData();
     formData.append('file', event.target.files[0]);
 
@@ -43,10 +49,8 @@ export default function Upload() {
     <div>
       <input type="file" onChange={uploadFile} />
       {id !== 0
-        ? success 
-            ? <div>Upload and processing is successful.</div>
-            : <div>Upload and processing is pending</div>
-        : null
+            ? <div>Upload and processing: {status}</div>
+            : null
       }
     </div>
   );

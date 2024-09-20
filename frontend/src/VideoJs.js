@@ -28,12 +28,6 @@ export default function VideoJS(props){
       const player = playerRef.current = videojs(videoElement, options, () => {
         videojs.log('player is ready');
 
-        player.on('pause',()=>{
-          const storedValue = localStorage.getItem("startTime");
-          player.currentTime(storedValue);
-          //player.currentTime(startTime);
-        })
-
         player.on('timeupdate',()=>{
           dispatch({
             type: "update timestamp",
@@ -69,10 +63,11 @@ export default function VideoJS(props){
   return (
     <div data-vjs-player style={{ display: 'flex', justifyContent: 'center' }}
     >
-      <div ref={videoRef}  style={{
+      <div id="videoid" ref={videoRef}  style={{
         width: '800px',
         height: '500px'
-      }} />
+      }}> 
+        </div>
     </div>
   );
 }

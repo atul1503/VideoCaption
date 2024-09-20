@@ -13,7 +13,8 @@ export default function Navigator(){
         }}>
             <div style={{
                 marginRight: '300px',
-                marginLeft: '100px'
+                marginLeft: '100px',
+                backgroundColor: 'blue', color: 'white'
             }} onClick={()=>{
 
                 dispatch({
@@ -23,7 +24,8 @@ export default function Navigator(){
 
             }}>History</div>
             <div style={{
-                marginRight: '300px'
+                marginRight: '300px',
+                backgroundColor: 'blue', color: 'white'
             }} onClick={()=>{
                 
                 dispatch({
@@ -33,7 +35,8 @@ export default function Navigator(){
 
             }}>Upload</div>
             <div style={{
-                marginRight: '300px'
+                marginRight: '300px',
+                backgroundColor: 'blue', color: 'white'
             }} onClick={()=>{
                 
                 dispatch({

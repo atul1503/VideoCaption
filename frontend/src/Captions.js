@@ -1,6 +1,7 @@
 
 import { useState,useRef,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import videojs from "video.js";
 
 export default function Captions(){
 
@@ -13,6 +14,7 @@ export default function Captions(){
     const [startTime,setstartTime]=useState(-1);
     const [endTime,setEndTime]=useState(-1);
     const searchRef=useRef(null);
+    const [timestamp,settimestamp]=useState(-1);
     const dispatch=useDispatch();
 
 
@@ -51,15 +53,21 @@ export default function Captions(){
             setstartTime(Math.floor(parseFloat(data.subtitle[0]['startSecond'])))
             setEndTime(Math.floor(parseFloat(data.subtitle[0]['endSecond'])))
             setcaption(data.subtitle[0]["caption"]);
+            //console.log(videodiv.getBoundingClientRect().top,videodiv.getBoundingClientRect().right);
+            const captiondiv=document.getElementById("captiondiv");
+            const videodiv=document.getElementsByTagName("video-js")[0].getBoundingClientRect();
+            var height=videodiv.top+videodiv.height*0.8;
+            var width=videodiv.left+videodiv.width*0.1;
+            captiondiv.style.top=height+'px';
+            captiondiv.style.left=width+'px';
+
         })
     },[video_full_name,time])
 
     return (
         <div>
-            <div style={{
+            <div id="captiondiv" style={{
                 position: "absolute",
-                left: '35%',
-                bottom: '33%',
                 color: 'white',
                 fontWeight: 1200
             }
@@ -101,6 +109,13 @@ export default function Captions(){
 <br/>
 <br/>
 
+
+                {timestamp>-1?<div style={{ color: 'blue' }} onClick={()=>{
+                    var player=videojs.getPlayer(document.getElementsByTagName("video-js")[0]);
+                    player.currentTime(timestamp);
+                }}>timestamp: {timestamp} </div>:null}
+
+
                 {languages.length!==0?
                 <div>
                    <label> Search text: <input type="text" ref={searchRef}/> </label>
@@ -128,17 +143,27 @@ export default function Captions(){
                         if(data.length==0){
                             return;
                         }
-                        console.log(data[0]["startSecond"]+" is the startsecond.");
-                        var startTime=Math.floor(parseFloat(data[0]["startSecond"]));
-                        localStorage.setItem("startTime", JSON.stringify(startTime));
+                        //var player=videojs.getPlayer(document.getElementsByTagName("video-js")[0]);
+                        //player.currentTime(parseInt(data[0]["startSecond"]));
+                        settimestamp(parseInt(data[0]["startSecond"]))
+
+                        //var startTime=Math.floor(parseFloat(data[0]["startSecond"]));
+                        //localStorage.setItem("startTime", JSON.stringify(startTime));
                         //dispatch({type: "update start time",payload: startTime})
                     })
                    }}> Search </button>
                 </div>
                 :null}
 
+
+
             </center>
 
+
+<br/>
+<br/>
+<br/>
+<br/>
         </div>
     )
 }
