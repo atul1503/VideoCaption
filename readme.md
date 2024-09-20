@@ -6,7 +6,7 @@ A web application that allows users to upload videos with subtitles and watch th
     2. Skip to your favourite part by searching for dialogues.
 
 ## Tech Stack used: 
-    django, postgres, redis, celery, nginx, react, redux,  docker
+    django, postgres, redis, celery, gunicorn, nginx, react, redux, docker
 
 
 ## How to run:
